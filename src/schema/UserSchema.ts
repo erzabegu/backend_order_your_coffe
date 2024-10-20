@@ -17,7 +17,7 @@ const userResetPasswordSchema = z.object({
 
 const verifyCodeSchema = z.object({
     email: z.string().email(),
-    code: z.string(),
+    code: z.string().length(4),
 })
 const resetPasswordSchema = z.object({
     email: z.string().email(),
