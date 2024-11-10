@@ -1,5 +1,5 @@
 import transporter from "../config/nodemailer";
-import {InternalException} from "../exceptions /HttpExceltions";
+import {InternalException} from "../exceptions/HttpExceltions";
 
 export const sendEmail = async (to: string, from: string, subject: string, text: string) => {
     try {

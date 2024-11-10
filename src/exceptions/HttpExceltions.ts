@@ -17,3 +17,9 @@ export class EntryNotFoundException extends HttpException {
         super(message, 502);
     }
 }
+
+export class UnauthorizedException extends HttpException {
+    constructor(message: string) {
+        super(message, 502);
+    }
+}

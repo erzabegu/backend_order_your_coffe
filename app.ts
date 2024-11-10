@@ -24,7 +24,6 @@ app.use(errorMiddleware)
 const port = process.env.PORT || 4000;
 
 const startServer = async () => {
-    console.log("first")
     try {
         await initFirebaseAdmin();
         app.listen(port, () => {

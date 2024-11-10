@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
-import {HttpException} from "../exceptions /root";
-import {InternalException} from "../exceptions /HttpExceltions";
+import {HttpException} from "../exceptions/root";
+import {InternalException} from "../exceptions/HttpExceltions";
 import {FirebaseError} from "firebase/app";
 import {ZodError} from "zod";
 

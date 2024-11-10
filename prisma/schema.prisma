@@ -16,3 +16,28 @@ model User {
   passwordResetCode      String?
   passwordResetExpiresAt DateTime?
 }
+
+model Store {
+  id       Int         @id @default(autoincrement())
+  name     String
+  location String?
+  items    StoreItem[]
+}
+
+model Item {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  stores      StoreItem[]
+}
+
+model StoreItem {
+  id      Int   @id @default(autoincrement())
+  price   Float
+  store   Store @relation(fields: [storeId], references: [id])
+  storeId Int
+  item    Item  @relation(fields: [itemId], references: [id])
+  itemId  Int
+
+  @@unique([storeId, itemId])
+}

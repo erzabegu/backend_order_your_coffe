@@ -18,7 +18,7 @@ import {
     EntryNotFoundException,
     InternalException,
     InvalidEmailOrPasswordException
-} from "../exceptions /HttpExceltions";
+} from "../exceptions/HttpExceltions";
 import admin from "firebase-admin";
 
 export const signup = async (req: Request, res: Response) => {
