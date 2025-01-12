@@ -8,36 +8,91 @@ datasource db {
 }
 
 model User {
-  id                     String    @id @default(cuid())
-  email                  String    @unique
+  id                     String       @id @default(cuid())
+  email                  String       @unique
   password               String
-  createdAt              DateTime  @default(now())
+  createdAt              DateTime     @default(now())
   name                   String
   passwordResetCode      String?
   passwordResetExpiresAt DateTime?
+  userOrders             UserOrders[] // Relation to UserOrders
+
+  @@map("users") // Optional: Set a custom database table name
 }
 
 model Store {
-  id       Int         @id @default(autoincrement())
-  name     String
-  location String?
-  items    StoreItem[]
+  id        Int          @id @default(autoincrement())
+  name      String
+  latitude  Decimal      @db.Decimal(9, 6) // 9 total digits, 6 after the decimal
+  longitude Decimal      @db.Decimal(9, 6) // 9 total digits, 6 after the decimal
+  items     StoreItem[] // Relation to StoreItem
+  orders    UserOrders[] // Relation to UserOrders
+
+  @@map("stores") // Optional: Set a custom database table name
 }
 
 model Item {
-  id          Int         @id @default(autoincrement())
-  name        String
-  description String?
-  stores      StoreItem[]
+  id         Int         @id @default(autoincrement())
+  name       String
+  url        String
+  price      Float // Price of the item
+  stores     StoreItem[] // Relation to StoreItem
+  orderItems OrderItem[] // Relation to OrderItem
+
+  @@map("items") // Optional: Set a custom database table name
 }
 
 model StoreItem {
   id      Int   @id @default(autoincrement())
   price   Float
-  store   Store @relation(fields: [storeId], references: [id])
+  store   Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
   storeId Int
-  item    Item  @relation(fields: [itemId], references: [id])
+  item    Item  @relation(fields: [itemId], references: [id], onDelete: Cascade)
   itemId  Int
 
   @@unique([storeId, itemId])
+  @@map("store_items")
+}
+
+enum CupSize {
+  SMALL
+  MEDIUM
+  LARGE
+}
+
+model Order {
+  id         Int          @id @default(autoincrement())
+  createdAt  DateTime     @default(now())
+  orderItems OrderItem[]
+  userOrders UserOrders[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id      Int     @id @default(autoincrement())
+  orderId Int
+  itemId  Int
+  amount  Int
+  cupSize CupSize
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  item  Item  @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@map("order_items")
+}
+
+model UserOrders {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  storeId   Int
+  orderId   Int
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, storeId, orderId])
+  @@map("user_orders")
 }

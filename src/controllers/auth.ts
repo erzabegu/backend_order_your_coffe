@@ -52,6 +52,7 @@ export const login = async (req: Request, res: Response) => {
     const userCredential = await signInWithEmailAndPassword(firebaseAuth, validatedUser.email, validatedUser.password);
     const firebaseUser = userCredential.user;
     const token = await firebaseUser.getIdToken();
+    //TODO duhet me e largu passwordin ne response
     res.status(200).json({user: foundUser, token});
 };
 

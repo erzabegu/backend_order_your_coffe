@@ -4,6 +4,7 @@ import prismaClient from "../config/prismaConfig";
 import {z} from "zod";
 
 export const getStores = async (req: Request, res: Response, next: NextFunction) => {
+
     const validatedData = StoresSchema.parse(req.query);
     const skip = (validatedData.pageNumber - 1) * validatedData.limit;
 
@@ -12,6 +13,7 @@ export const getStores = async (req: Request, res: Response, next: NextFunction)
         take: validatedData?.limit,
     });
     const totalRecords = await prismaClient.store.count();
+    console.log(skip, "skip")
 
     res.status(200).json({
         data: stores,
@@ -42,6 +44,7 @@ export const getStoreById = async (req: Request, res: Response, next: NextFuncti
         take: validatedData?.limit,
     });
     const totalRecords = await prismaClient.storeItem.count();
+
 
     res.status(200).json({
         data: storeItems,
